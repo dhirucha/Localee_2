@@ -1,12 +1,12 @@
-import BecomeAProvider from "./BecomeA_Provider/BecomeAProvider/BecomeAProvider"
-
+import React from 'react';
+import ServiceDetailsPage from './ServiceDetailsPage/ServiceDetailsPage'
 
 function App() {
   
 
   return (
     <>
-      <BecomeAProvider />
+    <ServiceDetailsPage />
     </>
   )
 }
