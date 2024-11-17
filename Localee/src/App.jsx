@@ -1,12 +1,13 @@
 import React from 'react';
-import ServiceDetailsPage from './ServiceDetailsPage/ServiceDetailsPage'
+
+import UserPanel from './UserPanel/UserPanel';
 
 function App() {
   
 
   return (
     <>
-    <ServiceDetailsPage />
+    <UserPanel />
     </>
   )
 }
