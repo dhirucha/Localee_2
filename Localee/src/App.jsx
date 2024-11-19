@@ -1,13 +1,13 @@
 import React from 'react';
 
-import UserPanel from './UserPanel/UserPanel';
+import VendorPanel from './UserPanel/VendorPanel';
 
 function App() {
   
 
   return (
     <>
-    <UserPanel />
+    <VendorPanel />
     </>
   )
 }
