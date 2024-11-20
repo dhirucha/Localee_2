@@ -1,79 +1,89 @@
-import React from 'react';
-import { Trash, Trash2 } from 'lucide-react';
+import React, { useState } from "react";
 
-function Bookings() {
+const bookingsData = [
+  {
+    id: 1,
+    service: "Plumbing",
+    vendor: "John Doe",
+    date: "2024-11-21",
+    time: "10:00 AM",
+    location: "123 Main Street, City",
+    status: "Pending", // Can be 'Pending', 'Accepted', or 'Rejected'
+  },
+  {
+    id: 2,
+    service: "Electrical Repair",
+    vendor: "Jane Smith",
+    date: "2024-11-22",
+    time: "02:00 PM",
+    location: "456 Elm Street, City",
+    status: "Accepted",
+  },
+  
+];
 
-    const upcomingBookings = [
-        { id: 1, name: "John Doe", service: "Home Cleaning", date: "2024-11-20", time: "10:00 AM" },
-        { id: 2, name: "Jane Smith", service: "Plumbing", date: "2024-11-22", time: "2:00 PM" },
-    ];
-    
-    const bookingHistory = [
-        { id: 1, name: "Alex Brown", service: "Photography", date: "2024-11-10", status: "Completed" },
-        { id: 2, name: "Emily Davis", service: "Beauty & Wellness", date: "2024-11-15", status: "Cancelled" },
-    ];
-    
-    const handleAction = (id, action) => {
-        console.log(`Booking ID: ${id} | Action: ${action}`);
-    };
-    
-    return ( 
+const BookingsHistory = () => {
+  const [bookings, setBookings] = useState(bookingsData);
 
-        <main className="flex-1 bg-gray-100 p-6 mt-16">
-        <h1 className="text-2xl font-bold mb-6">Bookings</h1>
+  const cancelBooking = (id) => {
+    const confirmCancel = window.confirm("Are you sure you want to cancel this booking?");
+    if (confirmCancel) {
+      setBookings(bookings.filter((booking) => booking.id !== id));
+    }
+  };
 
-        {/* Two Columns for Large Screens */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Upcoming Bookings */}
-          <div className="bg-white p-4 rounded shadow">
-            <h2 className="text-lg font-semibold mb-4">Upcoming Bookings</h2>
-            {upcomingBookings.map((booking) => (
-              <div key={booking.id} className="p-4 border-b border-gray-200 flex justify-between items-center">
-                <div>
-                  <p className="font-medium">{booking.name}</p>
-                  <p className="text-gray-600">{booking.service}</p>
-                  <p className="text-gray-500">{booking.date} at {booking.time}</p>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleAction(booking.id, "accept")}
-                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                  >
-                    Accept
-                  </button>
-                  <button
-                    onClick={() => handleAction(booking.id, "reject")}
-                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                  >
-                    Reject
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+  const getStatusBadge = (status) => {
+    let badgeClass = "";
 
-          {/* Booking History */}
-          <div className="bg-white p-4 rounded shadow">
-            
-            <div className='flex justify-between'>
-              <h2 className="text-lg font-semibold mb-4">Booking History</h2>
-              <button className='rounded-2xl w-fit px-2 py-1 h-fit border-2 flex text-sm font-medium hover:border-stone-600'>Clear All <Trash2 size={18} className='mt-0.2 ms-1' /></button>
-            </div>
+    switch (status) {
+      case "Accepted":
+        badgeClass = "bg-green-100 text-green-800";
+        break;
+      case "Rejected":
+        badgeClass = "bg-red-100 text-red-800";
+        break;
+      case "Pending":
+        badgeClass = "bg-yellow-100 text-yellow-800";
+        break;
+      default:
+        badgeClass = "bg-gray-100 text-gray-800";
+    }
 
-            {bookingHistory.map((history) => (
-              <div key={history.id} className="p-4 border-b border-gray-200">
-                <div className='flex justify-between'>
-                  <p className="font-medium">{history.name}</p>
-                  <button><Trash size={16} strokeWidth={1.25} /></button>
-                </div>
-                <p className="text-gray-600">{history.service}</p>
-                <p className="text-gray-500">{history.date} - {history.status}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
+    return (
+      <span
+        className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${badgeClass}`}
+      >
+        {status}
+      </span>
     );
-}
+  };
 
-export default Bookings;
+  return (
+    <div className="p-6 bg-gray-100">
+      <h2 className="text-2xl font-bold mb-4">Bookings History</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {bookings.map((booking) => (
+          <div
+            key={booking.id}
+            className="bg-white shadow-md rounded-lg p-4 border hover:shadow-lg"
+          >
+            <h3 className="text-xl font-semibold">{booking.service}</h3>
+            <p className="text-gray-700">Vendor: {booking.vendor}</p>
+            <p className="text-gray-700">Date: {booking.date}</p>
+            <p className="text-gray-700">Time: {booking.time}</p>
+            <p className="text-gray-700">Location: {booking.location}</p>
+            <div className="mt-2">Status: {getStatusBadge(booking.status)}</div>
+            <button
+              onClick={() => cancelBooking(booking.id)}
+              className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Cancel Booking
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default BookingsHistory;
